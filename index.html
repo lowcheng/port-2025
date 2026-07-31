@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.webp" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PORT</title>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <script
+      src="https://kit.fontawesome.com/3927294e6b.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body class="light-theme">
+    <div id="app"></div>
+    <!-- Control Buttons -->
+    <div class="control-buttons">
+      <button id="theme-toggle" class="control-btn">
+        <i class="fas fa-sun"></i>
+      </button>
+      <!-- <button id="sound-toggle" class="control-btn">
+        <i class="fas fa-volume-up"></i>
+      </button> -->
+    </div>
+
+    <!-- Back Button (hidden by default) -->
+    <button id="back-button" class="control-btn">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <div class="loading-screen">
+      <div class="loading-content">
+        <lottie-player
+          src="https://lottie.host/5901d04d-98ab-4452-ba04-cbf725181d78/WmOx1rW7Wi.json"
+          background="transparent"
+          speed="1"
+          style="width: 200px; height: 200px"
+          loop
+          autoplay
+        ></lottie-player>
+
+        <div class="loading-bar">
+          <div class="loading-bar-fill"></div>
+        </div>
+        <button class="loading-screen-btn">Enter</button>
+      </div>
+    </div>
+
+    <div class="modal about-modal">
+      <h1 class="modal-title">About Me</h1>
+      <button class="modal-close-btn">X</button>
+      <p class="intro-text">nihao</p>
+
+      Growing up playing video games, have always captivated me, which sparked
+      my interest in both the artistic and technical aspects of their creation.
+      This interest led me to pursue a diploma in Immersive Media, where I
+      acquired a broad range of skills, from design to programming. Outside of
+      work, I enjoy playing video games, spending time with my pets, and playing
+      the Erhu (二胡)！
+
+      <section class="about-section">
+        <div class="section-header">
+          <h2>Skillset</h2>
+          <i class="fas fa-tools icon-inline"></i>
+        </div>
+
+        <!-- <div class="skills-grid">
+          <div>
+            <h3>Programming</h3>
+            <ul>
+              <li>JavaScript</li>
+              <li>Python</li>
+              <li>C#</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Interactive</h3>
+            <ul>
+              <li>Blender</li>
+              <li>Unity</li>
+              <li>PlayCanvas</li>
+              <li>Three.js</li>
+              <li>Unreal Engine</li>
+              <li>SparkAR (Deprecated)</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Web Dev</h3>
+            <ul>
+              <li>HTML/CSS</li>
+              <li>Javscript</li>
+              <li></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3>Design & Misc</h3>
+            <ul>
+              <li>Maya</li>
+              <li>Figma</li>
+              <li>Photoshop & Illustrator</li>
+              <li>After Effects & Substance Painter</li>
+              <li>UI/UX Design</li>
+            </ul>
+          </div>
+        </div> -->
+
+        <ul class="skills-list">
+          <li><strong>Programming:</strong> JavaScript, GLSL, Python, C#</li>
+          <li><strong>Web Tech:</strong> HTML, CSS, JavaScript/TypeScript</li>
+          <li>
+            <strong>3D & Design:</strong> Blender, Figma, Adobe Creative Suite
+          </li>
+          <li><strong>Game Dev:</strong> Unity, Unreal , play canvas</li>
+        </ul>
+      </section>
+
+      <section class="about-section">
+        <div class="section-header">
+          <h2>Education</h2>
+          <i class="fas fa-graduation-cap icon-inline"></i>
+        </div>
+
+        <div class="entry">
+          <div class="entry-content">
+            <strong>Ngee Ann Polytechnic</strong><br />
+            Diploma in Immersive Media
+          </div>
+          <div class="entry-meta">
+            <img src="images/misc/np_logo.png" alt="NP logo" class="icon" />
+            <span class="date">2022 – 2025</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <div class="section-header">
+          <h2>Experience</h2>
+          <i class="fas fa-briefcase icon-inline"></i>
+        </div>
+
+        <!-- <div class="entry"> -->
+        <!-- <div class="entry-content">
+            <strong>CraveFX</strong><br />
+            <p>
+              Assisted in developing interactive experiences as an intern, then
+              advanced to a Junior role crafting interactive media, games, and
+              immersive experiences.
+            </p>
+
+            <h4>Projects</h4>
+            <ul>
+              <li>
+                <strong
+                  >Singapore Odyssea — National Museum of Singapore (Glass
+                  Rotunda)</strong
+                >
+                <ul>
+                  <li>
+                    Part of the <em>Spiral Ramp</em>, <em>Drum</em>, and
+                    <em>Transition Zone</em> team
+                  </li>
+                  <li>
+                    Deployed with nDisplay across a multi-node and projector
+                    setup;.
+                  </li>
+                  <li>
+                    Worked with projection/AV teams on warping and blending.
+                  </li>
+                  <li>
+                    Helped automate cluster launch and monitoring for reliable
+                    operations.
+                  </li>
+                </ul>
+                <a
+                  href="https://cravefx.com/blog/cravefx-powers-the-multimedia-vision-behind-singapore-odyssea/"
+                  target="_blank"
+                  rel="noopener"
+                  >Case study: CraveFX Powers the Multimedia Vision Behind
+                  Singapore Odyssea
+                </a>
+              </li>
+            </ul>
+          </div> -->
+
+        <!-- <div class="entry-meta">
+            <img src="images/misc/.jpg" alt="CraveFX logo" class="icon" />
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="role">Interactive Intern</span>
+                <span class="date">Sept 2024 – May 2025</span>
+              </div>
+              <div class="timeline-item">
+                <span class="role">Junior Interactive Developer</span>
+                <span class="date">May 2025 – Present</span>
+              </div>
+            </div>
+          </div> -->
+
+        <div class="entry entry--experience">
+          <!-- LEFT: Company + short description -->
+          <div class="entry-content">
+            <strong>CraveFX</strong><br />
+
+            <p class="entry-desc">
+              Started as an Interactive Intern and progressed into a Junior
+              Interactive Developer, contributing to interactive installations
+              and immersive experiences.
+            </p>
+          </div>
+
+          <!-- RIGHT: Logo + timeline -->
+          <div class="entry-meta">
+            <!-- Put your real logo file here -->
+            <img
+              src="images/misc/cravefx_logo.png"
+              alt="CraveFX logo"
+              class="icon"
+            />
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="role">Interactive Intern</span>
+                <span class="date">Sept 2024 – May 2025</span>
+              </div>
+              <div class="timeline-item">
+                <span class="role">Junior Interactive Developer</span>
+                <span class="date">May 2025 – Present</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- </div> -->
+      </section>
+    </div>
+
+    <!-- Projects Modal -->
+    <div
+      class="modal projects-modal"
+      id="projects-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Projects"
+    >
+      <!-- top chrome -->
+      <button class="pm-back" type="button" hidden aria-label="Back">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i>
+      </button>
+      <!-- was: <button class="pm-close" ...> -->
+      <button class="modal-close-btn pm-close" type="button" aria-label="Close">
+        X
+      </button>
+      <div class="pm-body">
+        <!-- INTRO + TECH (same content you had) -->
+        <div class="pm-intro" data-role="list-only">
+          <h1 class="modal-title">Portfolio Projects</h1>
+
+          <div class="pm-intro-grid">
+            <div class="modal-main-content">
+              <p><strong>🚧 Currently Building:</strong></p>
+              <p>
+                This interactive 3D portfolio is a work in progress, built using
+                <strong>Blender</strong> for modeling and
+                <strong>Three.js</strong> for rendering and interaction.
+              </p>
+
+              <p>
+                Most of the 3D models in this scene are modelled and textured by
+                me in Blender.
+              </p>
+
+              <p><strong>🔧 Work in Progress:</strong></p>
+              <ul>
+                Textures/Blender stuff
+              </ul>
+              <ul>
+                Repack UVs/Rebake Textures
+              </ul>
+              <ul>
+                Scene optimization
+              </ul>
+
+              <ul>
+                desktop OS
+              </ul>
+
+              <p><strong>📝 To-Do:</strong></p>
+
+              <ul>
+                Sound Effects
+              </ul>
+              <ul>
+                Touch Controls/ mobile support
+              </ul>
+
+              <p><strong>📝 Credits & Inspirations :</strong></p>
+              3D models - https://sketchfab.com/feed &nbsp; audio -
+              https://sonniss.com/gameaudiogdc/ &nbsp; bgm -
+              https://www.youtube.com/watch?v=LnIsdWZ_gkM &nbsp;
+              https://www.youtube.com/watch?v=qip5nX4Jt6M
+            </div>
+
+            <aside class="modal-tech-stack">
+              <h3>🧰 Tech Stack</h3>
+              <ul>
+                <li><strong>JavaScript</strong></li>
+                <li><strong>Three.js</strong></li>
+                <li><strong>Blender</strong></li>
+                <li><strong>GSAP</strong></li>
+                <li><strong>Howler.js</strong></li>
+              </ul>
+            </aside>
+          </div>
+
+          <hr class="pp-divider" />
+        </div>
+        <!-- centered title, list-only -->
+        <h2 id="pp-list-title" class="pp-section-title" data-role="list-only">
+          Projects
+        </h2>
+        <!-- LIST VIEW -->
+        <section
+          class="pp-projects"
+          id="pp-projects"
+          data-role="list-only"
+          aria-label="Project list"
+        >
+          <div class="pp-filter" role="tablist" aria-label="Project filters">
+            <button
+              class="pp-filter-btn is-active"
+              data-filter="all"
+              role="tab"
+              aria-selected="true"
+            >
+              All
+            </button>
+            <button
+              class="pp-filter-btn"
+              data-filter="web"
+              role="tab"
+              aria-selected="false"
+            >
+              Web Development
+            </button>
+            <button
+              class="pp-filter-btn"
+              data-filter="interactive"
+              role="tab"
+              aria-selected="false"
+            >
+              3D / Interactive
+            </button>
+          </div>
+
+          <div class="pp-grid">
+            <!-- CARD 1 -->
+            <article
+              class="pp-card"
+              data-category="interactive"
+              tabindex="0"
+              aria-label="Open details: Interactive 3D Portfolio"
+            >
+              <div class="pp-card__img">
+                <img
+                  src="/images/port-landscape.png"
+                  alt="Interactive 3D Portfolio"
+                />
+              </div>
+              <div class="pp-card__content">
+                <h3 class="pp-card__title">Interactive 3D Portfolio</h3>
+                <p class="pp-card__desc">
+                  A portfolio site showcasing web dev and 3D work.
+                </p>
+                <div class="pp-card__tech">
+                  <span class="pp-tag">HTML5</span>
+                  <span class="pp-tag">CSS3</span>
+                  <span class="pp-tag">JavaScript</span>
+                  <span class="pp-tag">Three.js</span>
+                </div>
+                <div class="pp-card__links">
+                  <a
+                    href="https://github.com/curtislow777/port-2025"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="View Code"
+                  >
+                    <i class="fab fa-github" aria-hidden="true"></i>
+                  </a>
+                  <a
+                    href="https://curt-folio.vercel.app/"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Live Demo"
+                  >
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <!-- CARD 2 -->
+            <!-- <article
+              class="pp-card"
+              data-category="web"
+              tabindex="0"
+              aria-label="Open details: Singapore Odyssea — Glass Rotunda"
+            >
+              <div class="pp-card__img">
+                <img
+                  src="/images/misc/singapore-odyssea.webp"
+                  alt="Entrance of Singapore Odyssea - Glass Rotunda"
+                  loading="lazy"
+                />
+              </div>
+              <div class="pp-card__content">
+                <h3 class="pp-card__title">
+                  Singapore Odyssea — National Museum of Singapore (Glass
+                  Rotunda)
+                </h3>
+                <p class="pp-card__desc">
+                  An immersive multimedia exhibition at the National Museum’s
+                  Glass Rotunda, built with Unreal Engine and nDisplay,
+                  featuring interactive projections and BLE tracking that guide
+                  visitors through 700 years of Singapore’s history.
+                </p>
+                <div class="pp-card__tech">
+                  <span class="pp-tag">Unreal Engine</span>
+                  <span class="pp-tag">nDisplay</span>
+                  <span class="pp-tag">MQTT BLE Tracking</span>
+                </div>
+                <div class="pp-card__links">
+                  <a
+                    href="https://cravefx.com/blog/cravefx-powers-the-multimedia-vision-behind-singapore-odyssea/"
+                    target="_blank"
+                    rel="noopener"
+                    aria-label="Case Study"
+                  >
+                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </article> -->
+          </div>
+        </section>
+
+        <!-- DETAIL VIEW (injected on click) -->
+        <section
+          id="pp-detail"
+          class="pp-detail"
+          hidden
+          aria-live="polite"
+        ></section>
+      </div>
+    </div>
+
+    <div class="modal erhu-modal">
+      <h1 class="modal-title">Huqin</h1>
+      <button class="modal-close-btn">X</button>
+
+      <div class="erhu-content">
+        <section class="erhu-text">
+          <p>
+            I joined my school's Chinese Orchestra on a whim and unexpectedly
+            found a new hobby: playing the Erhu(二胡). What started as curiosity
+            quickly became one of my favorite creative outlets.
+          </p>
+
+          <p>
+            I'm mostly self-taught, learning the instrument through tutorials on
+            YouTube and Chinese platforms, along with hours of solo practice.
+            Over time, I had the opportunity to perform in several school
+            concerts and even picked up the Zhonghu(中胡) as well.
+          </p>
+
+          <p>
+            I was part of the huqin section in the Ngee Ann Polytechnic Chinese
+            Orchestra (NPCO) from 2022-2025, and met some of my closest friends
+            there!
+          </p>
+
+          <p>My only regret is not starting sooner!!</p>
+        </section>
+
+        <!-- portrait goes right of the text -->
+        <img
+          src="/images/hq/zh-me.webp"
+          alt="me playing the erhu"
+          class="erhu-portrait"
+        />
+
+        <!-- stays full‑width underneath -->
+        <section class="erhu-gallery">
+          <img
+            src="/images/hq/huqin.webp"
+            alt="NPCO Huqin Section 2023"
+            class="erhu-img"
+          />
+          <img
+            src="/images/hq/npco.webp"
+            alt="NPCO 2023 Concert"
+            class="erhu-img"
+          />
+          <img
+            src="/images/hq/npco2.webp"
+            alt="NPCO 2024 Concert"
+            class="erhu-img"
+          />
+        </section>
+      </div>
+    </div>
+
+    <div class="modal contact-modal">
+      <!-- Close button (same as before) -->
+      <button class="modal-close-btn">X</button>
+
+      <!-- Heading -->
+      <h1 class="modal-title">CONTACT</h1>
+
+      <!-- Contact links/icons row -->
+      <div class="contact-links">
+        <!-- LinkedIn (FA “fab fa-linkedin-in”) -->
+        <a href="https://www.linkedin.com/in/curtis-low/" target="_blank">
+          <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+
+        <!-- GitHub (FA “fab fa-github”) -->
+        <a href="https://github.com/curtislow777" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+
+        <!-- Email (FA “fas fa-envelope”) -->
+        <a href="mailto:curtlow10@gmail.com">
+          <i class="fas fa-envelope"></i>
+          curtlow10@gmail.com
+        </a>
+      </div>
+
+      <!-- Contact form -->
+      <form class="contact-form">
+        <label for="contact-name">Name</label>
+        <input
+          type="text"
+          id="contact-name"
+          name="name"
+          placeholder="Your Name"
+          required
+        />
+
+        <label for="contact-email">Email</label>
+        <input
+          type="email"
+          id="contact-email"
+          name="email"
+          placeholder="Your Email"
+          required
+        />
+
+        <label for="contact-message">Message</label>
+        <textarea
+          id="contact-message"
+          name="message"
+          rows="4"
+          placeholder="Your Message"
+          required
+        ></textarea>
+
+        <button type="submit" class="send-button">Send Message</button>
+      </form>
+    </div>
+
+    <!-- Fade Overlay for Image Preview -->
+    <div class="fade-overlay">
+      <div class="fade-overlay-content">
+        <button class="fade-overlay-close-btn">X</button>
+        <img src="" alt="Preview Image" class="fade-overlay-img" />
+        <div class="fade-overlay-text"></div>
+      </div>
+    </div>
+
+    <div id="css3d"></div>
+    <canvas id="experience-canvas" class="experience-canvas"></canvas>
+
+    <!-- Overlay for all modals -->
+    <div class="overlay"></div>
+    <div class="whiteboard-controls" style="display: none">
+      <button
+        id="black-marker"
+        class="circular-button-whiteboard whiteboard-selected"
+      >
+        <i class="fa-solid fa-paintbrush"></i>
+      </button>
+
+      <button id="blue-marker" class="circular-button-whiteboard">
+        <i class="fa-solid fa-paintbrush"></i>
+      </button>
+
+      <button id="green-marker" class="circular-button-whiteboard">
+        <i class="fa-solid fa-paintbrush"></i>
+      </button>
+
+      <button id="red-marker" class="circular-button-whiteboard">
+        <i class="fa-solid fa-paintbrush"></i>
+      </button>
+
+      <!-- NEW: orange marker -->
+      <button id="orange-marker" class="circular-button-whiteboard">
+        <i class="fa-solid fa-paintbrush"></i>
+      </button>
+
+      <button id="eraser" class="circular-button-whiteboard">
+        <i class="fa-solid fa-eraser"></i>
+      </button>
+
+      <button id="clear-whiteboard" class="whiteboard-btn">Clear</button>
+      <button id="saveWhiteboard" class="circular-button-whiteboard">
+        <i class="fa-solid fa-floppy-disk"></i>
+      </button>
+    </div>
+
+    <!-- Hamburger Button -->
+    <button class="hamburger-btn" aria-label="Open menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <!-- Sliding Panel -->
+    <div class="side-panel">
+      <div class="panel-content">
+        <h2>Menu</h2>
+        <nav class="panel-nav">
+          <a href="#" class="panel-link">Reset Camera</a>
+          <a href="#" class="panel-link">Work</a>
+          <a href="#" class="panel-link">About</a>
+          <a href="#" class="panel-link">Contact</a>
+          <a href="#" class="panel-link">Whiteboard</a>
+        </nav>
+      </div>
+    </div>
+    <template id="tutorial-template">
+      <div class="tutorial-overlay">
+        <div class="tutorial-cursor">
+          <div class="cursor-icon"></div>
+        </div>
+        <div class="speech-bubble">
+          <div class="bubble-content"></div>
+          <div class="bubble-controls">
+            <div class="step-indicator">
+              <span class="current-step">1</span> /
+              <span class="total-steps">4</span>
+            </div>
+            <div class="bubble-buttons">
+              <button class="bubble-btn secondary" id="prevBtn">
+                Previous
+              </button>
+              <button class="bubble-btn" id="nextBtn">Next</button>
+            </div>
+          </div>
+        </div>
+        <button class="tutorial-skip">Skip Tutorial</button>
+      </div>
+    </template>
+    <!-- <script src="/src/scripts/effects/SparkleTrail.js"></script> -->
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+
+  <script>
+    document
+      .querySelector(".contact-form")
+      .addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          alert("✅ Message sent!");
+          form.reset();
+        } else {
+          alert("❌ Failed to send: " + result.message);
+        }
+      });
+  </script>
+</html>

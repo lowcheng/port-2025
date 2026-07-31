@@ -1,0 +1,22 @@
+{
+  "name": "port-2025",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "vite": "^6.0.5"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "howler": "^2.2.4",
+    "lottie-web": "^5.12.2",
+    "sass": "^1.86.0",
+    "three": "^0.172.0"
+  }
+}

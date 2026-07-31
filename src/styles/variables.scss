@@ -1,0 +1,142 @@
+// Light Theme Map
+$light-theme: (
+  --bg: #eef9fe,
+  --text: #2e2e2e,
+  --card-bg: #ffffff,
+  --icon: #2e2e2e,
+
+  // Buttons
+  --button-bg: #a3d4ff,
+  --button-hover: #5fb4ff,
+  --button-border: #ffffff,
+
+  --about-modal-bg: #f1f6ff,
+  --about-modal-border: #9cb5ff,
+  --about-modal-text: #1b2438,
+
+  --work-modal-bg: #fff7f9,
+  --work-modal-border: #f29ab6,
+  --work-modal-text: #5a1730,
+
+  --erhu-modal-bg: #f9f5ef,
+  --erhu-modal-border: #d8a16a,
+  --erhu-modal-text: #2e302f,
+
+  --contact-modal-bg: #f4f7ff,
+  --contact-modal-border: #9cb5ff,
+  --contact-modal-text: #23325a, // deep indigo for contrast
+);
+
+$dark-theme: (
+  /* ========= Global: soft night, not black ========= */ --bg: #202635,
+  // page background (blue-grey)
+  --card-bg: #262d3f,
+  // generic cards slightly darker
+  --text: #e8eef8,
+  // default text
+  --icon: #c7d2ff,
+
+  // icons
+  /* ========= Buttons ========= */ --button-bg: #27337c,
+  --button-hover: #4f6bff,
+  --button-border: #a5b4fc,
+
+  /* ========= About – dimmed version of day blue ========= */
+  --about-modal-bg: #283552,
+  // mid navy
+  --about-modal-border: #8fa2ff,
+  --about-modal-text: #f3f5ff,
+
+  /* ========= Work / Projects – dim rose/plum ========= */
+  --work-modal-bg: #43304a,
+  // mid plum
+  --work-modal-border: #f29abf,
+  --work-modal-text: #ffe8f3,
+
+  /* ========= Erhu – warm, but not cave-brown ========= */
+  --erhu-modal-bg: #3f3029,
+  // warm charcoal / stage wood
+  --erhu-modal-border: #e0a96a,
+  // brass/gold frame
+  --erhu-modal-text: #f5e6d0,
+
+  /* ========= Contact – UI-ish blue panel ========= */
+  --contact-modal-bg: #26364f,
+  // mid blue-grey
+  --contact-modal-border: #79a6ff,
+  --contact-modal-text: #eaf3ff
+);
+
+// Mixin to generate custom properties
+@mixin theme-vars($theme-map) {
+  @each $key, $val in $theme-map {
+    #{$key}: #{$val};
+  }
+}
+
+/* ===============================
+   🎨 Base Colour Palette
+================================= */
+$colour-blue: #7ec8e3;
+$colour-purple: #b392d0;
+$colour-black: #2e2e2e;
+$colour-white: #ffffff;
+
+$colour-wood: #a86432;
+$colour-cream: #fdfaf4;
+$colour-light-blue: #cdeffc;
+$colour-accent-pink: #f0b7cf;
+$colour-green: #b2ddbf;
+
+$colour-shadow: rgba(0, 0, 0, 0.15);
+
+/* ===============================
+    Day Theme Tokens
+================================= */
+$bg-day: #eef9fe;
+$text-day: $colour-black;
+$card-bg-day: $colour-white;
+$icon-colour-day: $colour-black;
+
+$button-bg-day: #a3d4ff;
+$button-hover-day: #5fb4ff;
+$button-border-day: #ffffff;
+
+/* ===============================
+    Night Theme Tokens
+================================= */
+$bg-night: #1a1e3a;
+$text-night: #eaeaff;
+$card-bg-night: #2b3060;
+$icon-colour-night: #c9d1ff;
+
+$button-bg-night: #232b72;
+$button-hover-night: #4b63ff; // match --button-hover in $dark-theme
+$button-border-night: #a5b4fc;
+
+/* ===============================
+    Semantic Tokens
+================================= */
+// Make "primary" match your day button colour
+$colour-primary: $button-bg-day;
+$colour-secondary: $colour-purple;
+$colour-surface: $colour-white;
+$colour-background: $bg-day; // override on theme switch
+$colour-text: $text-day; // override on theme switch
+
+$colour-on-primary: $colour-white; // text/icons on primary buttons
+
+/* ===============================
+   🔘 Button Tokens
+================================= */
+$button-bg: $button-bg-day;
+$button-hover-bg: $button-hover-day;
+$button-border: $button-border-day;
+$button-text: $colour-on-primary;
+
+/* ===============================
+   🪟 Modal Tokens
+================================= */
+$modal-bg: $card-bg-day;
+$modal-text: $text-day;
+$modal-backdrop: rgba(0, 0, 0, 0.4);

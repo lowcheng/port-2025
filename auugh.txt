@@ -1,0 +1,98 @@
+shadertoy.com
+https://catlikecoding.com/unity/tutorials/
+https://www.shadertoy.com/
+
+https://thebookofshaders.com/
+https://shadered.org/
+
+https://www.youtube.com/c/TheArtofCodeIsCool/videos
+
+https://sketchfab.com/3d-models/cute-ghost-
+2c8c03bb0e5049529e653f9011a8fc90
+https://sketchfab.com/3d-models/ghost-w-tophat-6b1217e3462440519a2d0e3e75bf16d3#download
+https://sketchfab.com/3d-models/ghosts-cc972c1c78af4b259afd23276eabf8cf#download
+
+models:
+Dog by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/07qH3gO5K8L)
+Crocodile by jeremy [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/fnUp2MrGjmr)
+Starfish by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/6H-0K9IEr56)
+Turtle by jeremy [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/0Sylqo1dCfu)
+Duck by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/6HpauUCfIAb)
+Piggy bank by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/dpvS2kdW6I9)
+Videogame Controller by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/6365MG_Pr_f)
+Computer mouse by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/6ikB7PIRVyd)
+Handheld videogame console by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/5kxD7n4F3lv)
+Crab by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/2DgM36qZW2u)
+Crab by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/1O5Q4pE8X6e)
+Capybara by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/66d-mKAgF17)
+Ladybird by Exceptional_3D (https://poly.pizza/m/3tCnJC9UYA)
+Hedgehog by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/8UNni5IvK_c)
+Cobra by jeremy [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/fBz0OKeCCON)
+Diplodocus by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/12n6ICAVpYB)
+Ladybug by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/0k_YwE0g_C9)
+Raccoon by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/5_mL2EUPZ1N)
+Small Pot by Isa Lousberg (https://poly.pizza/m/EjD1AJfTa4)
+Medium Pot by Isa Lousberg (https://poly.pizza/m/y05UXwo0fM)
+Dog bowl by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/eA4LSFu4lj1)
+Snake by Alex Safayan [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/ehbKAsFUWdJ)
+Cobra by jeremy [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/fBz0OKeCCON)
+Flying saucer by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/b0N_HeT_Ttb)
+Coral by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/80uVAty6wZ2)
+Flying saucer by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/fojR5i3h_nh)
+Laptop by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/6eBS-C3E33W)
+Skull by Kay Lousberg (https://poly.pizza/m/7clFQGz5jH)
+Fish Tank by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/FLnlsLbY2s)
+Chest Open by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/5yZC6q99BI)
+Post With Skull by Kay Lousberg (https://poly.pizza/m/gjX6yrxFfq)
+Arcade Machine by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/GLDkMhiynM)
+Trainer by jeremy [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/cs7k_ENAZjQ)
+Open Backpack by Emmett “TawpShelf” Baber [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/26m92LMKK4e)
+
+Frog Hat by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/IBL2UX2eOZ)
+Baseball cap by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/aaC5GgcWEhM)
+Hat Stand by J-Toastie [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/IWnizIOIyu)
+
+plants:
+Pothos Plant Medium by Isa Lousberg (https://poly.pizza/m/7gVHXckx8I)
+Pothos Plant Small by Isa Lousberg (https://poly.pizza/m/JVoJ2itVzh)
+Zz Plant by Isa Lousberg (https://poly.pizza/m/TZhCoT0C1e)
+Small Cacti Pot by Isa Lousberg (https://poly.pizza/m/vCLyYaeXZp)
+Monstera Plant by Isa Lousberg (https://poly.pizza/m/pkmHvN1O2V)
+Medium Monstera Plant by Isa Lousberg (https://poly.pizza/m/mhLLD0UJ5n)
+Small Monstera by Isa Lousberg (https://poly.pizza/m/DPlE9zBfHb)
+Pothos Plant Large by Isa Lousberg (https://poly.pizza/m/8kEliaHr9V)
+Sansevieria Plant by Isa Lousberg (https://poly.pizza/m/pdSNJNVbO9)
+Short Sansevieria Plant by Isa Lousberg (https://poly.pizza/m/ZW2WY7VAcj)
+Sansevieria Plant by Isa Lousberg (https://poly.pizza/m/BDwimVUool)
+Big Succulent Pot by Isa Lousberg (https://poly.pizza/m/y3zjCa6BeR)
+Med Succulent Pot by Isa Lousberg (https://poly.pizza/m/jVwbkGpESS)
+Waffle Stacked by Isa Lousberg (https://poly.pizza/m/fWeME8Kg4v)
+Cookie by Isa Lousberg (https://poly.pizza/m/cjC8EIH9xO)
+Pot Plant by Nick Slough [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/OXA1phQZgL)
+Houseplant by Quaternius (https://poly.pizza/m/bfLOqIV5uP)
+Chewy candy by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/eypf5TpQYSW)
+Candy by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/eda0Cf1aC2R)
+Cookie by Kenney (https://poly.pizza/m/9C0J38dV3i)
+Plant by Isa Lousberg (https://poly.pizza/m/wSt6PYau5u)
+
+Sansevieria Plant by Isa Lousberg (https://poly.pizza/m/pdSNJNVbO9)
+
+
+https://poly.pizza/bundle/Coral-Reef-Kit-ghN8EmbYa6
+https://poly.pizza/bundle/Animated-Fish-Bundle-44zhHN1UbT
+
+unused:
+Snake by Alex Safayan [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/ehbKAsFUWdJ)
+Spider web by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/cM0NzColM_0)
+Duck by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/c1fo7hQgC6J)
+Crayfish by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/3Y2cocX0ILR)
+Cobra by Poly by Google [CC-BY] (https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/40_5Xq467-U)
+
+
+https://poly.pizza/bundle/Ultimate-Monsters-Bundle-5oyGWAmOB6
+https://poly.pizza/bundle/Ultimate-Stylized-Nature-Pack-zyIyYd9yGr
+https://poly.pizza/u/Quaternius/Lists
+https://poly.pizza/bundle/Animated-Dinosaur-Bundle-SmoLdBLO2K
+https://poly.pizza/bundle/Farm-Animal-Pack-1kUvRTPLzT
+https://poly.pizza/bundle/Animated-Enemies-a53OJwHrhh
+
