@@ -88,6 +88,9 @@ export default function createRenderLoop() {
     if (appState.grassMaterial) {
       appState.grassMaterial.uniforms.uTime.value = elapsed;
     }
+    if (appState.environmentShaderController) {
+      appState.environmentShaderController.update(elapsed);
+    }
     if (appState.audioSliderController) {
       appState.audioSliderController.update(elapsed);
     }

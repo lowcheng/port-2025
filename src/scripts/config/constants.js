@@ -196,6 +196,7 @@ export const ANIMATION_DURATIONS = {
  */
 export const MODEL_PATHS = {
   room: "/models/room-port-v1.glb",
+  environment: "/models/env.glb",
   draco: "/draco/",
 };
 

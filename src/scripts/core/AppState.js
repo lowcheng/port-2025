@@ -37,6 +37,8 @@ class AppState {
     this.pigObject = null;
     this.steamMesh = null;
     this.whiteboard = null;
+    this.environment = null;
+    this.environmentShaderController = null;
     this.particleTrail = null; // <-- ADD THIS LINE
 
     /* ───────────────────────────────────

@@ -57,6 +57,7 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
       uniform float uTime;
       varying vec2 vUv;
       varying float vBladeVariation;
+      varying float vClumpVariation;
 
       void main() {
         vUv = uv;
@@ -66,6 +67,11 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
         vec2 instanceOffset = vec2(instanceMatrix[3][0], instanceMatrix[3][2]);
         float noise = sin(uTime * 1.5 + instanceOffset.x * 0.5 + instanceOffset.y * 0.5);
         vBladeVariation = 0.5 + 0.5 * sin(dot(instanceOffset, vec2(12.9898, 78.233)));
+
+        // Low-frequency world-space variation groups nearby blades into soft clumps.
+        float broadClump = sin(instanceOffset.x * 0.34 + instanceOffset.y * 0.27);
+        broadClump *= cos(instanceOffset.x * 0.19 - instanceOffset.y * 0.31);
+        vClumpVariation = broadClump * 0.5 + 0.5;
 
         // Assuming your Blender model's pivot is at the bottom (y=0)
         pos.x += noise * pos.y * 0.3;
@@ -80,6 +86,7 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
       uniform float uMixRatio;
       varying vec2 vUv;
       varying float vBladeVariation;
+      varying float vClumpVariation;
 
       void main() {
         // Sample the texture
@@ -92,19 +99,31 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
         }
 
         // Gradient coloring
-        vec3 dayBottomColor = vec3(0.15, 0.4, 0.1);
-        vec3 dayTopColor = vec3(0.4, 0.8, 0.3);
+        // These values are deliberately dark in linear shader space; the
+        // renderer's output transform lifts them into a natural mid-green.
+        vec3 dayBottomColor = vec3(0.025, 0.052, 0.015);
+        vec3 dayTopColor = vec3(0.10, 0.18, 0.055);
         vec3 nightBottomColor = vec3(0.008, 0.028, 0.03);
         vec3 nightTopColor = vec3(0.028, 0.068, 0.064);
         vec3 moonTint = vec3(0.032, 0.062, 0.082);
 
         float height = smoothstep(0.0, 1.0, vUv.y);
         float themeMix = uMixRatio * uMixRatio * (3.0 - 2.0 * uMixRatio);
-        float variation = (vBladeVariation - 0.5) * 0.08;
+        float bladeVariation = (vBladeVariation - 0.5) * 0.022;
+        float clumpVariation = mix(0.82, 1.07, vClumpVariation);
+        vec3 clumpTint = mix(
+          vec3(0.94, 1.0, 0.88),
+          vec3(1.03, 0.97, 0.86),
+          vClumpVariation
+        );
         float moonCatch = smoothstep(0.55, 1.0, vUv.y) * (0.014 + 0.016 * vBladeVariation);
 
-        vec3 dayColor = mix(dayBottomColor, dayTopColor, height) + variation;
-        vec3 nightColor = mix(nightBottomColor, nightTopColor, height) + variation * 0.35;
+        vec3 dayColor = (mix(dayBottomColor, dayTopColor, height) + bladeVariation)
+          * clumpVariation
+          * clumpTint;
+        vec3 nightColor = mix(nightBottomColor, nightTopColor, height)
+          * mix(0.84, 1.04, vClumpVariation)
+          + bladeVariation * 0.22;
         nightColor += moonTint * moonCatch;
 
         vec3 gradientColor = mix(dayColor, nightColor, themeMix);
@@ -120,7 +139,7 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
 export function createGrassGroundMaterial(uMixRatio = { value: 0 }) {
   return new THREE.ShaderMaterial({
     uniforms: {
-      uDayColor: { value: new THREE.Color(0x8fcf75) },
+      uDayColor: { value: new THREE.Color(0x31552a) },
       uNightColor: { value: new THREE.Color(0x040e0e) },
       uMixRatio,
     },

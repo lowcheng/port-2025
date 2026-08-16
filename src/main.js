@@ -35,6 +35,7 @@ import ErhuInteraction from "./scripts/special-interactions/erhu.js";
 import CalendarDate from "./scripts/utils/calenderDate.js";
 import { initSkybox } from "./scripts/shaders/SkyboxShader.js";
 import { setupLensFlare } from "./scripts/shaders/LensFlare.js";
+import { loadEnvironment } from "./scripts/core/EnvironmentLoader.js";
 // Configuration
 import {
   imageData,
@@ -68,7 +69,7 @@ let introTutorial = null;
  * SCENE LOADING
  * ===================================================================
  */
-function loadScene() {
+function loadScene(environmentReady = Promise.resolve()) {
   appState.gltfLoader.load("/models/RoomV3_export-v1.glb", (glb) => {
     const clips = glb.animations || [];
 
@@ -121,8 +122,24 @@ function loadScene() {
     // ─────────────────────────────────────────
     //  PROCESS SCENE + ADD
     // ─────────────────────────────────────────
-    const { grassGround } = processScene(glb.scene);
-    appState.grassMaterial = createGrassTerrain(appState.scene, grassGround);
+    const { grassGround: legacyGrassGround } = processScene(glb.scene);
+    environmentReady.then((environmentController) => {
+      const environmentGrassGround = environmentController?.grassGround;
+      const activeGrassGround = environmentGrassGround ?? legacyGrassGround;
+
+      if (environmentGrassGround && legacyGrassGround) {
+        legacyGrassGround.visible = false;
+      } else if (!environmentGrassGround) {
+        console.warn(
+          "[Environment] ENV_Grass_Ground was not found in env.glb; using the legacy room grass plane.",
+        );
+      }
+
+      appState.grassMaterial = createGrassTerrain(
+        appState.scene,
+        activeGrassGround,
+      );
+    });
     appState.audioSliderController = setupAudioSliders(glb.scene);
     appState.lampSwitch = setupLampSwitch(glb.scene);
     if (appState.raycasterController) {
@@ -444,7 +461,10 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
 
   // Load scene and start render loop
-  loadScene();
+  const environmentReady = loadEnvironment().catch((error) => {
+    console.error("[Environment] Failed to load env.glb", error);
+  });
+  loadScene(environmentReady);
   // loadPeashooter();
 
   appState.skyboxController = initSkybox(

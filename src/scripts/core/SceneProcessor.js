@@ -11,7 +11,8 @@ import {
 } from "../shaders/GrassShader.js";
 
 const MAILBOX_HOVER_GROUP_ID = "mailboxSet";
-const GRASS_EDGE_PADDING = 0.7;
+const GRASS_EDGE_PADDING = 0.25;
+const GRASS_PATH_PADDING = 0.32;
 
 export function processScene(sceneRoot) {
   let grassGround = null;
@@ -158,12 +159,17 @@ export function createGrassTerrain(scene, groundMesh) {
       return;
     }
 
-    const instanceCount = 7500; // Adjust as needed for performance/density balance
+    const instanceCount = 5200; // Looser coverage lets the ground and planting groups breathe
     groundMesh.updateWorldMatrix(true, false);
     const sampler = new MeshSurfaceSampler(groundMesh).build();
-    const innerBoundaryEdges = getWorldInnerBoundaryEdges(groundMesh);
+    const boundaryEdges = getWorldBoundaryEdges(groundMesh);
+    const pathExclusionBoxes = getPathExclusionBoxes(
+      appState.environment,
+      GRASS_PATH_PADDING,
+    );
     const sampledPosition = new THREE.Vector3();
     const sampledNormal = new THREE.Vector3();
+    const worldNormal = new THREE.Vector3();
     const worldPosition = new THREE.Vector3();
     const up = new THREE.Vector3(0, 1, 0);
     const alignToSurface = new THREE.Quaternion();
@@ -184,25 +190,31 @@ export function createGrassTerrain(scene, groundMesh) {
         worldPosition
           .copy(sampledPosition)
           .applyMatrix4(groundMesh.matrixWorld);
+        worldNormal
+          .copy(sampledNormal)
+          .transformDirection(groundMesh.matrixWorld);
+        if (worldNormal.dot(up) < 0) worldNormal.negate();
         attempts++;
       } while (
-        attempts < 20 &&
-        isNearBoundaryEdge(
-          worldPosition,
-          innerBoundaryEdges,
-          GRASS_EDGE_PADDING,
-        )
+        attempts < 30 &&
+        (worldNormal.dot(up) < 0.72 ||
+          isNearBoundaryEdge(
+            worldPosition,
+            boundaryEdges,
+            GRASS_EDGE_PADDING,
+          ) ||
+          isInsideExclusionBox(worldPosition, pathExclusionBoxes))
       );
 
-      sampledNormal.transformDirection(groundMesh.matrixWorld);
-
       dummy.position.copy(worldPosition);
-      alignToSurface.setFromUnitVectors(up, sampledNormal);
+      alignToSurface.setFromUnitVectors(up, worldNormal);
       dummy.quaternion.copy(alignToSurface);
       dummy.rotateY(Math.random() * Math.PI * 2);
 
-      const scale = 0.45 + Math.random() * 0.45;
-      dummy.scale.set(scale, scale, scale);
+      const widthScale = 0.42 + Math.random() * 0.38;
+      const heightScale = 0.42 + Math.random() * 0.55;
+      // Keep the shorter average height, but avoid a uniformly clipped lawn.
+      dummy.scale.set(widthScale, heightScale * 0.65, widthScale);
 
       dummy.updateMatrix();
       instancedGrass.setMatrixAt(i, dummy.matrix);
@@ -212,6 +224,31 @@ export function createGrassTerrain(scene, groundMesh) {
   });
 
   return grassMaterial;
+}
+
+function getPathExclusionBoxes(environmentRoot, padding) {
+  if (!environmentRoot) return [];
+
+  const paddingVector = new THREE.Vector3(padding, 0, padding);
+  const boxes = [];
+
+  environmentRoot.updateWorldMatrix(true, true);
+  environmentRoot.traverse((child) => {
+    if (!child.isMesh || !child.name.startsWith("ENV_Path_Stone_")) return;
+
+    const box = new THREE.Box3().setFromObject(child);
+    box.min.sub(paddingVector);
+    box.max.add(paddingVector);
+    box.min.y = Number.NEGATIVE_INFINITY;
+    box.max.y = Number.POSITIVE_INFINITY;
+    boxes.push(box);
+  });
+
+  return boxes;
+}
+
+function isInsideExclusionBox(point, boxes) {
+  return boxes.some((box) => box.containsPoint(point));
 }
 
 function categorizeAnimated(mesh) {
@@ -229,7 +266,7 @@ function processSpecial(mesh) {
   if (name.includes("pig-head")) appState.setPigObject(mesh);
 }
 
-function getWorldInnerBoundaryEdges(mesh) {
+function getWorldBoundaryEdges(mesh) {
   const geometry = mesh.geometry;
   const position = geometry.attributes.position;
   const index = geometry.index;
@@ -282,62 +319,7 @@ function getWorldInnerBoundaryEdges(mesh) {
         .applyMatrix4(mesh.matrixWorld),
     }));
 
-  const boundaryLoops = getBoundaryLoops(boundaryEdges);
-
-  if (boundaryLoops.length <= 1) return [];
-
-  const outerLoop = boundaryLoops.reduce((largestLoop, loop) =>
-    getLoopLengthSq(loop) > getLoopLengthSq(largestLoop) ? loop : largestLoop,
-  );
-
-  return boundaryLoops.filter((loop) => loop !== outerLoop).flat();
-}
-
-function getBoundaryLoops(boundaryEdges) {
-  const edgesByKey = new Map();
-  const unusedEdges = new Set(boundaryEdges);
-
-  boundaryEdges.forEach((edge) => {
-    if (!edgesByKey.has(edge.aKey)) edgesByKey.set(edge.aKey, []);
-    if (!edgesByKey.has(edge.bKey)) edgesByKey.set(edge.bKey, []);
-
-    edgesByKey.get(edge.aKey).push(edge);
-    edgesByKey.get(edge.bKey).push(edge);
-  });
-
-  const loops = [];
-
-  while (unusedEdges.size > 0) {
-    const firstEdge = unusedEdges.values().next().value;
-    const loop = [firstEdge];
-    unusedEdges.delete(firstEdge);
-
-    const startKey = firstEdge.aKey;
-    let currentKey = firstEdge.bKey;
-
-    while (currentKey !== startKey) {
-      const nextEdge = edgesByKey
-        .get(currentKey)
-        ?.find((edge) => unusedEdges.has(edge));
-
-      if (!nextEdge) break;
-
-      loop.push(nextEdge);
-      unusedEdges.delete(nextEdge);
-      currentKey = nextEdge.aKey === currentKey ? nextEdge.bKey : nextEdge.aKey;
-    }
-
-    loops.push(loop);
-  }
-
-  return loops;
-}
-
-function getLoopLengthSq(loop) {
-  return loop.reduce(
-    (total, { start, end }) => total + start.distanceToSquared(end),
-    0,
-  );
+  return boundaryEdges;
 }
 
 function isNearBoundaryEdge(point, boundaryEdges, padding) {
