@@ -58,9 +58,12 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
       varying vec2 vUv;
       varying float vBladeVariation;
       varying float vClumpVariation;
+      varying float vContactShade;
+      attribute float aContactShade;
 
       void main() {
         vUv = uv;
+        vContactShade = aContactShade;
         vec3 pos = position;
 
         // Wind sway
@@ -87,6 +90,7 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
       varying vec2 vUv;
       varying float vBladeVariation;
       varying float vClumpVariation;
+      varying float vContactShade;
 
       void main() {
         // Sample the texture
@@ -127,6 +131,7 @@ export function createGrassMaterial(uMixRatio = { value: 0 }) {
         nightColor += moonTint * moonCatch;
 
         vec3 gradientColor = mix(dayColor, nightColor, themeMix);
+        gradientColor *= mix(1.0, 0.48, vContactShade);
 
         // Apply the gradient. (Since the remaining texture is white, it tints perfectly)
         gl_FragColor = vec4(gradientColor, 1.0);

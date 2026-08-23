@@ -80,6 +80,7 @@ export async function loadEnvironment() {
         nightDark: 0x101a15,
         nightLight: 0x263528,
         variationScale: 0.29,
+        patchStrength: 1.0,
       }),
     ],
     [

@@ -19,6 +19,7 @@ import appState from "./scripts/core/AppState.js";
 import {
   processScene,
   createGrassTerrain,
+  createSceneContactShadows,
 } from "./scripts/core/SceneProcessor.js"; // Singleton Managers
 import themeManager from "./scripts/themeManager.js";
 import audioManager from "./scripts/core/audio.js";
@@ -135,9 +136,25 @@ function loadScene(environmentReady = Promise.resolve()) {
         );
       }
 
+      appState.contactShadowGroup = createSceneContactShadows(
+        appState.scene,
+        {
+          environmentRoot: environmentController?.root,
+          roomRoot: glb.scene,
+          roomGroundReference: legacyGrassGround,
+          groundRoot: environmentController?.groundRoot,
+          groundMesh: activeGrassGround,
+        },
+      );
+
       appState.grassMaterial = createGrassTerrain(
         appState.scene,
         activeGrassGround,
+        {
+          environmentRoot: environmentController?.root,
+          roomRoot: glb.scene,
+          roomGroundReference: legacyGrassGround,
+        },
       );
     });
     appState.audioSliderController = setupAudioSliders(glb.scene);

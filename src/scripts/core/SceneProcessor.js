@@ -9,6 +9,7 @@ import {
   createGrassGroundMaterial,
   createGrassMaterial,
 } from "../shaders/GrassShader.js";
+import { createContactShadowMaterial } from "../shaders/EnvironmentShader.js";
 
 const MAILBOX_HOVER_GROUP_ID = "mailboxSet";
 const GRASS_EDGE_PADDING = 0.25;
@@ -129,7 +130,15 @@ export function processScene(sceneRoot) {
 //   return grassMaterial;
 // }
 
-export function createGrassTerrain(scene, groundMesh) {
+export function createGrassTerrain(
+  scene,
+  groundMesh,
+  {
+    environmentRoot = appState.environment,
+    roomRoot = null,
+    roomGroundReference = null,
+  } = {},
+) {
   // 1. Create the material immediately
   const grassMaterial = createGrassMaterial(themeManager.uMixRatio);
 
@@ -164,8 +173,13 @@ export function createGrassTerrain(scene, groundMesh) {
     const sampler = new MeshSurfaceSampler(groundMesh).build();
     const boundaryEdges = getWorldBoundaryEdges(groundMesh);
     const pathExclusionBoxes = getPathExclusionBoxes(
-      appState.environment,
+      environmentRoot,
       GRASS_PATH_PADDING,
+    );
+    const grassInfluenceZones = getGrassInfluenceZones(
+      environmentRoot,
+      roomRoot,
+      roomGroundReference,
     );
     const sampledPosition = new THREE.Vector3();
     const sampledNormal = new THREE.Vector3();
@@ -175,6 +189,12 @@ export function createGrassTerrain(scene, groundMesh) {
     const alignToSurface = new THREE.Quaternion();
 
     // Use your custom blade geometry!
+    const contactShadeAttribute = new THREE.InstancedBufferAttribute(
+      new Float32Array(instanceCount),
+      1,
+    );
+    bladeGeo.setAttribute("aContactShade", contactShadeAttribute);
+
     const instancedGrass = new THREE.InstancedMesh(
       bladeGeo,
       grassMaterial,
@@ -184,6 +204,9 @@ export function createGrassTerrain(scene, groundMesh) {
 
     for (let i = 0; i < instanceCount; i++) {
       let attempts = 0;
+      let grassEffect = { rejection: 0, heightScale: 1, shade: 0 };
+      let patchMask = 0;
+      let rejectForThinning = false;
 
       do {
         sampler.sample(sampledPosition, sampledNormal);
@@ -194,16 +217,31 @@ export function createGrassTerrain(scene, groundMesh) {
           .copy(sampledNormal)
           .transformDirection(groundMesh.matrixWorld);
         if (worldNormal.dot(up) < 0) worldNormal.negate();
+
+        grassEffect = getGrassZoneEffect(
+          worldPosition,
+          grassInfluenceZones,
+        );
+        patchMask = getGrassPatchMask(worldPosition);
+        // Patch noise now varies blade height/color only. Randomly removing
+        // instances created obvious bald islands in an otherwise even lawn.
+        const patchRejection = 0;
+        const rejectionProbability =
+          1 -
+          (1 - grassEffect.rejection) *
+            (1 - patchRejection);
+        rejectForThinning = Math.random() < rejectionProbability;
         attempts++;
       } while (
-        attempts < 30 &&
+        attempts < 48 &&
         (worldNormal.dot(up) < 0.72 ||
           isNearBoundaryEdge(
             worldPosition,
             boundaryEdges,
             GRASS_EDGE_PADDING,
           ) ||
-          isInsideExclusionBox(worldPosition, pathExclusionBoxes))
+          isInsideExclusionBox(worldPosition, pathExclusionBoxes) ||
+          rejectForThinning)
       );
 
       dummy.position.copy(worldPosition);
@@ -213,17 +251,219 @@ export function createGrassTerrain(scene, groundMesh) {
 
       const widthScale = 0.42 + Math.random() * 0.38;
       const heightScale = 0.42 + Math.random() * 0.55;
-      // Keep the shorter average height, but avoid a uniformly clipped lawn.
-      dummy.scale.set(widthScale, heightScale * 0.65, widthScale);
+      const patchHeightScale = THREE.MathUtils.lerp(1, 0.9, patchMask);
+      const proximityWidthScale = THREE.MathUtils.lerp(
+        1,
+        0.9,
+        1 - grassEffect.heightScale,
+      );
+      dummy.scale.set(
+        widthScale * proximityWidthScale,
+        heightScale * 0.65 * grassEffect.heightScale * patchHeightScale,
+        widthScale * proximityWidthScale,
+      );
 
       dummy.updateMatrix();
       instancedGrass.setMatrixAt(i, dummy.matrix);
+      contactShadeAttribute.setX(i, grassEffect.shade);
     }
+
+    contactShadeAttribute.needsUpdate = true;
 
     scene.add(instancedGrass);
   });
 
   return grassMaterial;
+}
+
+export function createSceneContactShadows(
+  scene,
+  {
+    environmentRoot,
+    roomRoot,
+    roomGroundReference,
+    groundRoot,
+    groundMesh,
+  },
+) {
+  const previousGroup = scene.getObjectByName("procedural-contact-shadows");
+  if (previousGroup) scene.remove(previousGroup);
+
+  const group = new THREE.Group();
+  group.name = "procedural-contact-shadows";
+  const groundContactAreas = [];
+
+  const geometry = new THREE.PlaneGeometry(1, 1);
+  const materials = {
+    tree: createContactShadowMaterial({ opacity: 0.27 }),
+    bush: createContactShadowMaterial({ opacity: 0.22 }),
+    hedge: createContactShadowMaterial({ opacity: 0.17 }),
+    room: createContactShadowMaterial({ opacity: 0.2 }),
+    platform: createContactShadowMaterial({
+      color: 0x435057,
+      opacity: 0.18,
+      name: "PlatformContactShadowShader",
+    }),
+  };
+
+  const groundBox = new THREE.Box3().setFromObject(groundRoot ?? groundMesh);
+  const groundTopY = new THREE.Box3().setFromObject(groundMesh).max.y;
+
+  const addShadow = ({ center, width, depth, y, material, name }) => {
+    const shadow = new THREE.Mesh(geometry, material);
+    shadow.name = name;
+    shadow.rotation.x = -Math.PI * 0.5;
+    shadow.position.set(center.x, y, center.z);
+    shadow.scale.set(width, depth, 1);
+    shadow.renderOrder = 1;
+    shadow.frustumCulled = true;
+    group.add(shadow);
+  };
+
+  const addGroundContactArea = ({
+    center,
+    width,
+    depth,
+    falloff,
+    strength,
+  }) => {
+    groundContactAreas.push({
+      bounds: new THREE.Vector4(
+        center.x - width * 0.5,
+        center.z - depth * 0.5,
+        center.x + width * 0.5,
+        center.z + depth * 0.5,
+      ),
+      params: new THREE.Vector2(falloff, strength),
+    });
+  };
+
+  if (!groundBox.isEmpty()) {
+    const platformCenter = groundBox.getCenter(new THREE.Vector3());
+    const platformSize = groundBox.getSize(new THREE.Vector3());
+    addShadow({
+      center: platformCenter,
+      width: platformSize.x * 1.06,
+      depth: platformSize.z * 1.06,
+      y: groundBox.min.y - 0.035,
+      material: materials.platform,
+      name: "contact-shadow-platform",
+    });
+  }
+
+  const roomBox = getRoomFoundationBox(roomRoot, roomGroundReference);
+  if (!roomBox.isEmpty()) {
+    const roomCenter = roomBox.getCenter(new THREE.Vector3());
+    const roomSize = roomBox.getSize(new THREE.Vector3());
+    addShadow({
+      center: roomCenter,
+      width: roomSize.x * 1.22,
+      depth: roomSize.z * 1.22,
+      y: groundTopY + 0.012,
+      material: materials.room,
+      name: "contact-shadow-room",
+    });
+    addGroundContactArea({
+      center: roomCenter,
+      width: roomSize.x,
+      depth: roomSize.z,
+      falloff: 0.9,
+      strength: 0.18,
+    });
+  }
+
+  environmentRoot?.updateWorldMatrix(true, true);
+  environmentRoot?.traverse((child) => {
+    if (!child.isMesh) return;
+
+    const name = child.name;
+    const box = new THREE.Box3().setFromObject(child);
+    if (box.isEmpty()) return;
+
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+
+    if (/^ENV_Tree_.*_Trunk$/.test(name)) {
+      const shadowWidth = THREE.MathUtils.clamp(size.x * 0.8, 0.9, 2.0);
+      const shadowDepth = THREE.MathUtils.clamp(size.z * 0.8, 0.75, 1.65);
+      addShadow({
+        center,
+        width: shadowWidth,
+        depth: shadowDepth,
+        y: groundTopY + 0.016,
+        material: materials.tree,
+        name: `contact-shadow-${name}`,
+      });
+      addGroundContactArea({
+        center,
+        width: shadowWidth,
+        depth: shadowDepth,
+        falloff: 0.82,
+        strength: 0.44,
+      });
+    } else if (/^ENV_Bush_.*_Base$/.test(name)) {
+      const shadowWidth = THREE.MathUtils.clamp(size.x * 0.92, 0.9, 2.5);
+      const shadowDepth = THREE.MathUtils.clamp(size.z * 0.92, 0.8, 2.1);
+      addShadow({
+        center,
+        width: shadowWidth,
+        depth: shadowDepth,
+        y: groundTopY + 0.014,
+        material: materials.bush,
+        name: `contact-shadow-${name}`,
+      });
+      addGroundContactArea({
+        center,
+        width: shadowWidth,
+        depth: shadowDepth,
+        falloff: 0.68,
+        strength: 0.34,
+      });
+    } else if (/^ENV_Hedge_/.test(name)) {
+      const shadowWidth = THREE.MathUtils.clamp(size.x * 0.8, 0.85, 2.6);
+      const shadowDepth = THREE.MathUtils.clamp(size.z * 0.8, 0.7, 1.9);
+      addShadow({
+        center,
+        width: shadowWidth,
+        depth: shadowDepth,
+        y: groundTopY + 0.013,
+        material: materials.hedge,
+        name: `contact-shadow-${name}`,
+      });
+      addGroundContactArea({
+        center,
+        width: shadowWidth,
+        depth: shadowDepth,
+        falloff: 0.62,
+        strength: 0.3,
+      });
+    }
+  });
+
+  applyGroundContactAreas(groundMesh, groundContactAreas);
+
+  scene.add(group);
+  return group;
+}
+
+function applyGroundContactAreas(groundMesh, contactAreas) {
+  const materials = Array.isArray(groundMesh?.material)
+    ? groundMesh.material
+    : [groundMesh?.material];
+
+  materials.forEach((material) => {
+    const boxUniform = material?.uniforms?.uContactBoxes;
+    const paramsUniform = material?.uniforms?.uContactParams;
+    if (!boxUniform || !paramsUniform) return;
+
+    boxUniform.value.forEach((bounds) => bounds.set(0, 0, 0, 0));
+    paramsUniform.value.forEach((params) => params.set(0, 0));
+
+    contactAreas.slice(0, 32).forEach((area, index) => {
+      boxUniform.value[index].copy(area.bounds);
+      paramsUniform.value[index].copy(area.params);
+    });
+  });
 }
 
 function getPathExclusionBoxes(environmentRoot, padding) {
@@ -251,6 +491,162 @@ function isInsideExclusionBox(point, boxes) {
   return boxes.some((box) => box.containsPoint(point));
 }
 
+function getGrassInfluenceZones(
+  environmentRoot,
+  roomRoot,
+  roomGroundReference,
+) {
+  const zones = [];
+
+  environmentRoot?.updateWorldMatrix(true, true);
+  environmentRoot?.traverse((child) => {
+    if (!child.isMesh) return;
+
+    let settings = null;
+    if (child.name.startsWith("ENV_Path_Stone_")) {
+      settings = {
+        falloff: 0.86,
+        rejection: 0.28,
+        minHeight: 0.5,
+        shade: 0.5,
+      };
+    } else if (/^ENV_Tree_.*_Trunk$/.test(child.name)) {
+      settings = {
+        falloff: 0.92,
+        rejection: 0.2,
+        minHeight: 0.52,
+        shade: 0.72,
+      };
+    } else if (/^ENV_Bush_.*_Base$/.test(child.name)) {
+      settings = {
+        falloff: 0.82,
+        rejection: 0.14,
+        minHeight: 0.58,
+        shade: 0.58,
+      };
+    } else if (/^ENV_Hedge_/.test(child.name)) {
+      settings = {
+        falloff: 0.72,
+        rejection: 0.12,
+        minHeight: 0.62,
+        shade: 0.52,
+      };
+    }
+
+    if (!settings) return;
+    const box = new THREE.Box3().setFromObject(child);
+    if (!box.isEmpty()) zones.push({ box, ...settings });
+  });
+
+  const roomEdges = getWorldInnerBoundaryEdges(roomGroundReference);
+  if (roomEdges.length > 0) {
+    zones.push({
+      edges: roomEdges,
+      falloff: 0.72,
+      rejection: 0.2,
+      minHeight: 0.5,
+      shade: 0.46,
+    });
+  } else {
+    const roomBox = getRoomFoundationBox(roomRoot, roomGroundReference);
+    if (!roomBox.isEmpty()) {
+      zones.push({
+        box: roomBox,
+        falloff: 0.92,
+        rejection: 0.2,
+        minHeight: 0.5,
+        shade: 0.48,
+      });
+    }
+  }
+
+  return zones;
+}
+
+function getGrassZoneEffect(point, zones) {
+  let rejection = 0;
+  let heightScale = 1;
+  let shade = 0;
+
+  zones.forEach((zone) => {
+    const distance = zone.edges
+      ? distanceToEdges(point, zone.edges)
+      : distanceToBoxXZ(point, zone.box);
+    const influence = 1 - THREE.MathUtils.smoothstep(
+      distance,
+      0,
+      zone.falloff,
+    );
+
+    rejection = Math.max(rejection, influence * zone.rejection);
+    heightScale = Math.min(
+      heightScale,
+      THREE.MathUtils.lerp(1, zone.minHeight, influence),
+    );
+    shade = Math.max(shade, influence * zone.shade);
+  });
+
+  return { rejection, heightScale, shade };
+}
+
+function getGrassPatchMask(point) {
+  const patchField =
+    Math.sin(point.x * 0.43 + point.z * 0.19) *
+      Math.cos(point.x * 0.23 - point.z * 0.37) *
+      0.5 +
+    0.5;
+
+  return THREE.MathUtils.smoothstep(patchField, 0.68, 0.9);
+}
+
+function distanceToBoxXZ(point, box) {
+  const dx = Math.max(box.min.x - point.x, 0, point.x - box.max.x);
+  const dz = Math.max(box.min.z - point.z, 0, point.z - box.max.z);
+  return Math.hypot(dx, dz);
+}
+
+function distanceToEdges(point, edges) {
+  if (edges.length === 0) return Number.POSITIVE_INFINITY;
+
+  let minimumDistanceSq = Number.POSITIVE_INFINITY;
+  edges.forEach(({ start, end }) => {
+    minimumDistanceSq = Math.min(
+      minimumDistanceSq,
+      distanceToSegmentSq(point, start, end),
+    );
+  });
+
+  return Math.sqrt(minimumDistanceSq);
+}
+
+function getFilteredWorldBox(root, predicate = () => true) {
+  const result = new THREE.Box3();
+  if (!root) return result;
+
+  root.updateWorldMatrix(true, true);
+  root.traverse((child) => {
+    if (!child.isMesh || !predicate(child)) return;
+
+    const childBox = new THREE.Box3().setFromObject(child);
+    if (!childBox.isEmpty()) result.union(childBox);
+  });
+
+  return result;
+}
+
+function getRoomFoundationBox(roomRoot, roomGroundReference) {
+  const boundaryBox = getInnerBoundaryBox(roomGroundReference);
+  if (!boundaryBox.isEmpty()) return boundaryBox;
+
+  const foundationMesh = roomRoot?.getObjectByName("texture-one");
+  if (foundationMesh) return new THREE.Box3().setFromObject(foundationMesh);
+
+  return getFilteredWorldBox(
+    roomRoot,
+    (mesh) => mesh.name !== "grass-ground",
+  );
+}
+
 function categorizeAnimated(mesh) {
   const { name } = mesh;
   if (name.includes("keycapAnimate"))
@@ -264,6 +660,35 @@ function categorizeAnimated(mesh) {
 function processSpecial(mesh) {
   const { name } = mesh;
   if (name.includes("pig-head")) appState.setPigObject(mesh);
+}
+
+function getWorldInnerBoundaryEdges(mesh) {
+  if (!mesh?.isMesh) return [];
+
+  const boundaryEdges = getWorldBoundaryEdges(mesh);
+  const worldBox = new THREE.Box3().setFromObject(mesh);
+  const epsilon = 0.08;
+
+  return boundaryEdges.filter(({ start, end }) => {
+    const midpointX = (start.x + end.x) * 0.5;
+    const midpointZ = (start.z + end.z) * 0.5;
+    const touchesOuterBoundary =
+      Math.abs(midpointX - worldBox.min.x) < epsilon ||
+      Math.abs(midpointX - worldBox.max.x) < epsilon ||
+      Math.abs(midpointZ - worldBox.min.z) < epsilon ||
+      Math.abs(midpointZ - worldBox.max.z) < epsilon;
+
+    return !touchesOuterBoundary;
+  });
+}
+
+function getInnerBoundaryBox(mesh) {
+  const box = new THREE.Box3();
+  getWorldInnerBoundaryEdges(mesh).forEach(({ start, end }) => {
+    box.expandByPoint(start);
+    box.expandByPoint(end);
+  });
+  return box;
 }
 
 function getWorldBoundaryEdges(mesh) {

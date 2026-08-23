@@ -83,6 +83,9 @@ const groundFragmentShader = /* glsl */ `
   uniform vec3 uNightDark;
   uniform vec3 uNightLight;
   uniform float uVariationScale;
+  uniform float uPatchStrength;
+  uniform vec4 uContactBoxes[32];
+  uniform vec2 uContactParams[32];
 
   varying vec3 vWorldNormal;
   varying vec3 vWorldPosition;
@@ -106,8 +109,41 @@ const groundFragmentShader = /* glsl */ `
     );
     variation = variation * 0.5 + 0.5;
 
+    float patchField = sin(
+      vWorldPosition.x * 0.43 + vWorldPosition.z * 0.19
+    );
+    patchField *= cos(
+      vWorldPosition.x * 0.23 - vWorldPosition.z * 0.37
+    );
+    patchField = patchField * 0.5 + 0.5;
+    float patchMask = smoothstep(0.68, 0.90, patchField) * uPatchStrength;
+
+    float contactShadow = 0.0;
+    for (int i = 0; i < 32; i++) {
+      vec4 bounds = uContactBoxes[i];
+      vec2 params = uContactParams[i];
+      vec2 outsideDistance = max(
+        max(
+          bounds.xy - vWorldPosition.xz,
+          vWorldPosition.xz - bounds.zw
+        ),
+        vec2(0.0)
+      );
+      float distanceFromContact = length(outsideDistance);
+      float softContact = 1.0 - smoothstep(
+        0.0,
+        max(params.x, 0.001),
+        distanceFromContact
+      );
+      contactShadow = max(contactShadow, softContact * params.y);
+    }
+
     vec3 dayColor = mix(uDayDark, uDayLight, variation);
     vec3 nightColor = mix(uNightDark, uNightLight, variation);
+    dayColor *= mix(1.0, 0.80, patchMask);
+    nightColor *= mix(1.0, 0.72, patchMask);
+    dayColor *= 1.0 - contactShadow;
+    nightColor *= 1.0 - contactShadow * 0.82;
     float themeMix = smoothstep(0.0, 1.0, uMixRatio);
     vec3 color = mix(dayColor, nightColor, themeMix) * surfaceLight;
 
@@ -125,6 +161,7 @@ export function createEnvironmentGroundMaterial({
   nightDark,
   nightLight,
   variationScale = 0.32,
+  patchStrength = 0.0,
 }) {
   return new THREE.ShaderMaterial({
     name,
@@ -135,12 +172,67 @@ export function createEnvironmentGroundMaterial({
       uNightDark: { value: new THREE.Color(nightDark) },
       uNightLight: { value: new THREE.Color(nightLight) },
       uVariationScale: { value: variationScale },
+      uPatchStrength: { value: patchStrength },
+      uContactBoxes: {
+        value: Array.from({ length: 32 }, () => new THREE.Vector4()),
+      },
+      uContactParams: {
+        value: Array.from({ length: 32 }, () => new THREE.Vector2()),
+      },
     },
     vertexShader: groundVertexShader,
     fragmentShader: groundFragmentShader,
     side: THREE.DoubleSide,
     transparent: false,
     depthWrite: true,
+    toneMapped: true,
+  });
+}
+
+const contactShadowVertexShader = /* glsl */ `
+  varying vec2 vUv;
+
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const contactShadowFragmentShader = /* glsl */ `
+  uniform vec3 uColor;
+  uniform float uOpacity;
+
+  varying vec2 vUv;
+
+  void main() {
+    vec2 centeredUv = (vUv - 0.5) * 2.0;
+    float radialDistance = length(centeredUv);
+    float alpha = (1.0 - smoothstep(0.12, 1.0, radialDistance)) * uOpacity;
+
+    if (alpha < 0.002) discard;
+    gl_FragColor = vec4(uColor, alpha);
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
+  }
+`;
+
+export function createContactShadowMaterial({
+  color = 0x26312b,
+  opacity = 0.16,
+  name = "ContactShadowShader",
+} = {}) {
+  return new THREE.ShaderMaterial({
+    name,
+    uniforms: {
+      uColor: { value: new THREE.Color(color) },
+      uOpacity: { value: opacity },
+    },
+    vertexShader: contactShadowVertexShader,
+    fragmentShader: contactShadowFragmentShader,
+    side: THREE.DoubleSide,
+    transparent: true,
+    depthWrite: false,
+    depthTest: true,
     toneMapped: true,
   });
 }
