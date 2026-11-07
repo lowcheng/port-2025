@@ -6,6 +6,8 @@ import appState from "../core/AppState.js";
 import audioManager from "./audio.js";
 import { imageData, socialLinks, BUTTON_IDS } from "../config/constants.js";
 import themeManager from "../themeManager.js";
+import InteractionTooltip from "../ui/InteractionTooltip.js";
+import { getInteractionLabel } from "../ui/interactionLabels.js";
 
 /**
  * Wrapper around THREE.Raycaster with a few built-in “hover helpers”.
@@ -51,6 +53,10 @@ export default class RaycasterController {
 
     /** hover-groupId -> THREE.Object3D[] */
     this.hoverGroups = {};
+    this.tooltip = new InteractionTooltip({
+      getLabel: (object) => getInteractionLabel(object, { darkMode: themeManager.isDarkMode }),
+      isDarkMode: () => themeManager.isDarkMode,
+    });
 
     window.addEventListener("click", () => this._handleClick());
   }
@@ -85,6 +91,7 @@ export default class RaycasterController {
     this.intersects = this.raycaster.intersectObjects(this.objects, true);
 
     const primaryHit = this.intersects[0]?.object || null;
+    this.tooltip.update(primaryHit);
     // === ADD THIS BLOCK ===
     if (this.erhuInteraction) {
       const isErhuHovered = this.erhuInteraction.isErhuObject(primaryHit);
@@ -191,6 +198,7 @@ export default class RaycasterController {
   }
 
   clearHover() {
+    this.tooltip.clearScene();
     if (this.outlinePass) this.outlinePass.selectedObjects = [];
     if (this.scaleTargets?.length) updateHoverScale([], this.scaleTargets);
     if (this.mailbox?.setMailboxHoverState) {
@@ -221,6 +229,7 @@ export default class RaycasterController {
   /** Clear references (helps GC in SPA/Hot-reload flows) */
   // In dispose(), add erhu cleanup:
   dispose() {
+    this.tooltip.dispose();
     this.objects = [];
     this.scaleTargets = [];
     this.outlinePass = null;
@@ -274,6 +283,16 @@ export default class RaycasterController {
     }
 
     // 1) modals --------------------------------------------------------
+    if (object.userData.spotifyPlayer) {
+      audioManager.playClick();
+      appState.openSpotifyPanel?.();
+      return;
+    }
+    if (object.userData.gameShelf) {
+      audioManager.playClick();
+      appState.openGameShelf?.();
+      return;
+    }
     if (object.name.includes("about-raycast")) return openModal("about");
     else if (object.name.includes("work-raycast")) return openModal("projects");
     else if (object.name.includes("erhu-raycast")) return openModal("erhu");

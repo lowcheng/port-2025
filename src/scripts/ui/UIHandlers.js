@@ -64,6 +64,12 @@ export function initSidePanel() {
       case "whiteboard":
         cameraManager.zoomToWhiteboard(whiteboard, 1.5);
         break;
+      case "on repeat":
+        appState.openSpotifyPanel?.();
+        break;
+      case "recently played":
+        appState.openGameShelf?.();
+        break;
     }
   }
 }

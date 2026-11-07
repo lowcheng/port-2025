@@ -1,0 +1,22 @@
+.interaction-tooltip {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  box-sizing: border-box;
+  max-width: min(280px, calc(100vw - 16px));
+  width: max-content;
+  padding: 9px 14px;
+  border: 2px solid var(--about-modal-border);
+  border-radius: 12px;
+  background: var(--about-modal-bg);
+  color: var(--about-modal-text);
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: normal;
+  text-align: left;
+  overflow-wrap: anywhere;
+  box-shadow: 0 3px 12px #14253e12;
+  &[hidden] {
+    display: none !important;
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "profileUrl": "https://steamcommunity.com/profiles/76561198076864296/",
+  "fetchedAt": "2026-11-06T10:41:22.080Z",
+  "games": [
+    {
+      "appId": 71340,
+      "name": "Sonic Generations",
+      "hoursOnRecord": 0.9,
+      "lastPlayedLabel": "6 Nov",
+      "cover": "/images/steam/71340.jpg",
+      "url": "https://store.steampowered.com/app/71340/"
+    },
+    {
+      "appId": 391220,
+      "name": "Rise of the Tomb Raider",
+      "hoursOnRecord": 3.5,
+      "lastPlayedLabel": "5 Nov",
+      "cover": "/images/steam/391220.jpg",
+      "url": "https://store.steampowered.com/app/391220/"
+    },
+    {
+      "appId": 498240,
+      "name": "Batman - The Telltale Series",
+      "hoursOnRecord": 2.1,
+      "lastPlayedLabel": "4 Nov",
+      "cover": "/images/steam/498240.jpg",
+      "url": "https://store.steampowered.com/app/498240/"
+    },
+    {
+      "appId": 2358720,
+      "name": "Black Myth: Wukong",
+      "hoursOnRecord": 56,
+      "lastPlayedLabel": null,
+      "cover": "/images/steam/2358720.jpg",
+      "url": "https://store.steampowered.com/app/2358720/"
+    },
+    {
+      "appId": 1313140,
+      "name": "Cult of the Lamb",
+      "hoursOnRecord": 25,
+      "lastPlayedLabel": null,
+      "cover": "/images/steam/1313140.jpg",
+      "url": "https://store.steampowered.com/app/1313140/"
+    },
+    {
+      "appId": 3764200,
+      "name": "Resident Evil Requiem",
+      "hoursOnRecord": 7.6,
+      "lastPlayedLabel": null,
+      "cover": "/images/steam/3764200.jpg",
+      "url": "https://store.steampowered.com/app/3764200/"
+    },
+    {
+      "appId": 548430,
+      "name": "Deep Rock Galactic",
+      "hoursOnRecord": 8,
+      "lastPlayedLabel": null,
+      "cover": "/images/steam/548430.jpg",
+      "url": "https://store.steampowered.com/app/548430/"
+    }
+  ],
+  "featuredGames": []
+}

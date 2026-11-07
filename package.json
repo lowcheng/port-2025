@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sync:steam": "node scripts/sync-steam-shelf.mjs",
+    "connect:spotify": "node scripts/connect-spotify.mjs"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

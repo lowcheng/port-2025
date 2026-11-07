@@ -28,6 +28,9 @@ import audioManager from "./scripts/core/audio.js";
 import { setupMailbox } from "./scripts/special-interactions/mailbox.js";
 import { setupAudioSliders } from "./scripts/special-interactions/audioSliders.js";
 import { setupLampSwitch } from "./scripts/special-interactions/lampSwitch.js";
+import { setupGameShelf, initializeGameShelfPanel } from "./scripts/special-interactions/gameShelf.js";
+import { loadMusicPlayer } from "./scripts/special-interactions/musicPlayer.js";
+import { initializeSpotifyPanel } from "./scripts/special-interactions/spotifyPanel.js";
 
 import { initImageOverlay } from "./scripts/fadeOverlayImage.js";
 import { createSteamEffect } from "./scripts/shaders/steamEffect.js";
@@ -124,6 +127,10 @@ function loadScene(environmentReady = Promise.resolve()) {
     //  PROCESS SCENE + ADD
     // ─────────────────────────────────────────
     const { grassGround: legacyGrassGround } = processScene(glb.scene);
+    appState.gameShelf = setupGameShelf(glb.scene);
+    appState.openGameShelf = initializeGameShelfPanel();
+    appState.openSpotifyPanel = initializeSpotifyPanel();
+    loadMusicPlayer(glb.scene);
     environmentReady.then((environmentController) => {
       const environmentGrassGround = environmentController?.grassGround;
       const activeGrassGround = environmentGrassGround ?? legacyGrassGround;

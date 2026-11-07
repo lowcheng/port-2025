@@ -1,0 +1,117 @@
+.game-shelf-panel {
+  box-sizing: border-box;
+  width: min(720px, calc(100vw - 28px));
+  max-height: calc(100dvh - 40px);
+  padding: 32px;
+  overflow-y: auto;
+  border: 7px solid var(--about-modal-border);
+  border-radius: 24px;
+  background: var(--about-modal-bg);
+  color: var(--about-modal-text);
+  box-shadow: 0 18px 70px #14253e40;
+
+  &::backdrop {
+    background: #17233d88;
+    backdrop-filter: blur(5px);
+  }
+  .game-shelf-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--button-bg);
+    color: inherit;
+    font-size: 28px;
+    cursor: pointer;
+  }
+  .game-shelf-eyebrow {
+    margin: 0 50px 8px 0;
+    font-size: 13px;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(27px, 5vw, 38px);
+    font-weight: normal;
+  }
+  .game-shelf-intro {
+    margin: 8px 0 24px;
+    opacity: 0.8;
+  }
+  .game-shelf-games {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+  a {
+    color: inherit;
+    text-underline-offset: 4px;
+  }
+  .game-shelf-game {
+    text-decoration: none;
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      display: block;
+      border-radius: 6px;
+      box-shadow: 3px 5px 0 #14253e24;
+      transition: transform 0.2s;
+    }
+    h3 {
+      font-size: 16px;
+      font-weight: normal;
+      margin: 13px 0 6px;
+    }
+    p {
+      font-size: 12px;
+      line-height: 1.6;
+      margin: 0;
+      opacity: 0.8;
+    }
+    &:hover img {
+      transform: translateY(-4px);
+    }
+  }
+  :focus-visible {
+    outline: 3px solid var(--about-modal-text);
+    outline-offset: 5px;
+  }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    border-top: 1px solid var(--about-modal-border);
+    padding-top: 18px;
+    margin-top: 26px;
+    font-size: 13px;
+  }
+  footer span {
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 500px) {
+  .game-shelf-panel {
+    padding: 26px 18px;
+    .game-shelf-games {
+      gap: 12px;
+    }
+    .game-shelf-game h3 {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .game-shelf-game p {
+      font-size: 11px;
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-shelf-panel .game-shelf-game img {
+    transition: none;
+  }
+}

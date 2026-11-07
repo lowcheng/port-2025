@@ -37,6 +37,9 @@ class AppState {
     this.pigObject = null;
     this.steamMesh = null;
     this.whiteboard = null;
+    this.gameShelf = null;
+    this.openGameShelf = null;
+    this.openSpotifyPanel = null;
     this.environment = null;
     this.environmentShaderController = null;
     this.particleTrail = null; // <-- ADD THIS LINE
